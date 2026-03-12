@@ -104,14 +104,14 @@ static void create_dataset(int datasetNum, int numARows, int numACols,
 }
 
 int main() {
-  create_dataset(0, 16, 16, 16);
-  create_dataset(1, 64, 64, 64);
-  create_dataset(2, 64, 128, 64);
-  create_dataset(3, 112, 48, 16);
-  create_dataset(4, 84, 84, 84);
-  create_dataset(5, 80, 99, 128);
-  create_dataset(6, 67, 53, 64);
-  create_dataset(7, 29, 117, 85);
+//  create_dataset(0, 16, 16, 16);
+//  create_dataset(1, 64, 64, 64);
+//  create_dataset(2, 64, 128, 64);
+//  create_dataset(3, 112, 48, 16);
+//  create_dataset(4, 84, 84, 84);
+//  create_dataset(5, 80, 99, 128);
+//  create_dataset(6, 67, 53, 64);
+//  create_dataset(7, 29, 117, 85);
   create_dataset(8, 191, 19, 241);
   return 0;
 }
