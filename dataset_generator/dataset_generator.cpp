@@ -104,9 +104,6 @@ static void create_dataset(int datasetNum, int numARows, int numACols,
 }
 
 int main() {
-  base_dir = gpuTKPath_join(gpuTKDirectory_current(),
-                         "TiledMatrixMultiplication", "Dataset");
-
   create_dataset(0, 16, 16, 16);
   create_dataset(1, 64, 64, 64);
   create_dataset(2, 64, 128, 64);
