@@ -20,17 +20,14 @@ __global__ void matrixMultiply(float *A, float *B, float *C, int numARows,
     __shared__ float As[TILE_SIZE][TILE_SIZE];
     __shared__ float Bs[TILE_SIZE][TILE_SIZE];
 
-    // Индексы блока и потока
     int bx = blockIdx.x, by = blockIdx.y;
     int tx = threadIdx.x, ty = threadIdx.y;
 
-    // Глобальные координаты элемента в C
     int row = by * TILE_SIZE + ty;
     int col = bx * TILE_SIZE + tx;
 
-    // Параметры обхода по внутренней размерности (K = numAColumns)
-    int aBegin = numAColumns * TILE_SIZE * by;  // Смещение начала строки блока в A
-    int bBegin = TILE_SIZE * bx;                 // Смещение начала столбца блока в B
+    int aBegin = numAColumns * TILE_SIZE * by;
+    int bBegin = TILE_SIZE * bx;
     int aStep  = TILE_SIZE;
     int bStep  = TILE_SIZE * numBColumns;
     int numTiles = (numAColumns + TILE_SIZE - 1) / TILE_SIZE;
@@ -38,14 +35,12 @@ __global__ void matrixMultiply(float *A, float *B, float *C, int numARows,
     float Csub = 0.0f;
 
     for (int t = 0; t < numTiles; ++t) {
-        // Загрузка подматрицы A с проверкой границ
         int aCol = t * TILE_SIZE + tx;
         if (row < numARows && aCol < numAColumns)
             As[ty][tx] = A[aBegin + t * aStep + numAColumns * ty + tx];
         else
             As[ty][tx] = 0.0f;
 
-        // Загрузка подматрицы B с проверкой границ
         int bRow = t * TILE_SIZE + ty;
         if (bRow < numBRows && col < numBColumns)
             Bs[ty][tx] = B[bBegin + t * bStep + numBColumns * ty + tx];
@@ -54,7 +49,6 @@ __global__ void matrixMultiply(float *A, float *B, float *C, int numARows,
 
         __syncthreads();
 
-        // Умножение текущих тайлов
         #pragma unroll
         for (int k = 0; k < TILE_SIZE; ++k)
             Csub += As[ty][k] * Bs[k][tx];
@@ -62,7 +56,6 @@ __global__ void matrixMultiply(float *A, float *B, float *C, int numARows,
         __syncthreads();
     }
 
-    // Запись результата с проверкой границ
     if (row < numCRows && col < numCColumns)
         C[row * numCColumns + col] = Csub;
 }
